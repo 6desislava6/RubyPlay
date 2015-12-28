@@ -1,21 +1,21 @@
 require 'net/scp'
 require 'net/ssh'
 
-
+# Registers the raspberry
 class SSHRegisterRaspberry
 
   TEMPLATE = "cat ~/.ssh/id_rsa.pub | ssh %{user}@%{host} 'cat >> .ssh/authorized_keys'"
   class << self
     def register_raspberry(host, user, password)
-      Net::SSH.start(host, user, :password => password) do |ssh|
-        ssh.exec TEMPLATE % {user: user, host: host}
+      Net::SSH.start(host, user, password: password) do |ssh|
+        ssh.exec TEMPLATE % { user: user, host: host }
       end
     end
   end
   # after registering the raspberry no more passwords will be required
 end
 
-
+# Connects the raspberry to the server
 class SSHConnector
 
   def initialize(host, user, keys)
@@ -25,7 +25,7 @@ class SSHConnector
   end
 
   def upload_song(local_name, dest_name)
-    #Net::SCP.start(@host, @user,  :key_data => @keys, :keys_only => TRUE) do |scp|
+    # .start(@host, @user,  :key_data => @keys, :keys_only => TRUE)
     Net::SCP.start(@host, @user) do |scp|
       channel = scp.upload local_name, "./Desi/#{dest_name}"
       channel.wait
@@ -36,32 +36,32 @@ class SSHConnector
     make_fifo
     Net::SSH.start(@host, @user) do |ssh|
       ssh.exec "omxplayer -o local ./Desi/#{song_name} <fifo &"
-      ssh.exec "echo -n "" > fifo"
+      ssh.exec 'echo -n "" > fifo'
     end
   end
 
   def pause_song
     Net::SSH.start(@host, @user) do |ssh|
-      ssh.exec "echo -n p >fifo"
+      ssh.exec 'echo -n p >fifo'
     end
   end
 
   def stop_song
     Net::SSH.start(@host, @user) do |ssh|
-      ssh.exec "echo -n q >fifo"
+      ssh.exec 'echo -n q >fifo'
     end
     remove_fifo
   end
 
   def make_fifo
     Net::SSH.start(@host, @user) do |ssh|
-      ssh.exec "mkfifo fifo"
+      ssh.exec 'mkfifo fifo'
     end
   end
 
   def remove_fifo
     Net::SSH.start(@host, @user)do |ssh|
-      ssh.exec "rm fifo"
+      ssh.exec 'rm fifo'
     end
   end
 end
