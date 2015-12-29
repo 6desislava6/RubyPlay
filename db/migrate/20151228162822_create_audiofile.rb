@@ -5,12 +5,15 @@ class CreateAudiofile < ActiveRecord::Migration
       t.string :title
       t.string :artist
       t.string :duration
-      t.name :name
+      #t.name :name
       t.timestamps
     end
+    add_attachment :audio_files, :file
+
   end
 
   def down
     drop_table :audio_files
+    remove_attachment :audio_files, :file
   end
 end

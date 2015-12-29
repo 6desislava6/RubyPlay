@@ -36,4 +36,5 @@ build/
 *~
 command
 models/associations.txt
+public/system
 

@@ -14,16 +14,21 @@
 ActiveRecord::Schema.define(version: 20151228173648) do
 
   create_table "audio_files", force: :cascade do |t|
-    t.string   "title"
     t.integer  "user_id"
+    t.string   "title"
+    t.string   "artist"
+    t.string   "duration"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "file_file_name"
+    t.string   "file_content_type"
+    t.integer  "file_file_size"
+    t.datetime "file_updated_at"
   end
 
   create_table "playlists", force: :cascade do |t|
-    t.string   "title"
     t.integer  "user_id"
-    t.integer  "audio_files_id"
+    t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -31,8 +36,6 @@ ActiveRecord::Schema.define(version: 20151228173648) do
   create_table "users", force: :cascade do |t|
     t.string   "email"
     t.string   "password"
-    t.integer  "audio_files_id"
-    t.integer  "playlists_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

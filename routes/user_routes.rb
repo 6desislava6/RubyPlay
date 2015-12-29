@@ -3,6 +3,8 @@ require 'sinatra/activerecord'
 require './models/User'
 require './models/AudioFile'
 require './models/Playlist'
+require "paperclip"
+
 
 class RubyPlay < Sinatra::Base
   register Sinatra::ActiveRecordExtension
@@ -29,6 +31,27 @@ class RubyPlay < Sinatra::Base
       erb :new
     end
   end
+  end
+
+  get '/file' do
+    erb :file_upload
+  end
+
+  post "/file" do
+    #@filename = params[:file][:filename]
+    #params[:photo][:image] = params[:photo][:image][:tempfile] if params[:photo][:image]
+
+    title = params[:file][:filename]
+    file = params[:file][:tempfile]
+    @audio_file = AudioFile.new
+    @audio_file.title = title
+    @audio_file.file = file
+    success = @audio_file.save
+    if success
+        { :status => "OK"}.to_json
+    else
+        { :status => "NOK"}.to_json
+    end
+  end
 
 end
-
