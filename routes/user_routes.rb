@@ -15,8 +15,8 @@ class RubyPlay < Sinatra::Base
 
   get '/users/:id' do
     @users = User.find_by_id(params[:id])
-    @users.to_s
-  end
+    @users.name
+    end
 
   post "/new" do
     p params[:user]

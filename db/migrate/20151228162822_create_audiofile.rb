@@ -1,8 +1,11 @@
 class CreateAudiofile < ActiveRecord::Migration
   def change
     create_table :audio_files do |t|
+      t.belongs_to :user
       t.string :title
-      t.references :user
+      t.string :artist
+      t.string :duration
+      t.name :name
       t.timestamps
     end
   end
