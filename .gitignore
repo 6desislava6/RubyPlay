@@ -37,4 +37,6 @@ build/
 command
 models/associations.txt
 public/system
+ruby_play.sqlite3
+
 

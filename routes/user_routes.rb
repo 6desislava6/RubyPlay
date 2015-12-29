@@ -31,7 +31,6 @@ class RubyPlay < Sinatra::Base
       erb :new
     end
   end
-  end
 
   get '/file' do
     erb :file_upload
