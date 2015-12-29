@@ -3,8 +3,11 @@ require 'sinatra/activerecord'
 require './models/User'
 require './models/AudioFile'
 require './models/Playlist'
-require "paperclip"
+require 'paperclip'
+# require 'net/scp'
+# require 'net/ssh'
 
+require_relative '../controllers/ssh_connection'
 
 class RubyPlay < Sinatra::Base
   register Sinatra::ActiveRecordExtension
@@ -36,7 +39,33 @@ class RubyPlay < Sinatra::Base
     erb :file_upload
   end
 
-  post "/file" do
+  get '/files' do
+    @audio_files = AudioFile.all
+    erb :all_audio_files
+  end
+
+  get '/play_song' do
+    erb :play_song
+  end
+
+
+  post '/files' do
+    audio_file = AudioFile.find(params[:id].to_i)
+    path = make_math(params, audio_file)
+
+    HOST = "10.42.0.136"
+    USER = "pi"
+    ssh = SSHConnector.new(HOST, USER, [])
+    ssh.upload_song(path, audio_file.title)
+    ssh.play_song(audio_file.title)
+    "Playing"
+  end
+
+  def make_math(params, audio_file)
+    "./public/system/files/#{params[:id]}/original/" + audio_file.file_file_name + '.'
+  end
+
+  post '/file' do
     #@filename = params[:file][:filename]
     #params[:photo][:image] = params[:photo][:image][:tempfile] if params[:photo][:image]
 

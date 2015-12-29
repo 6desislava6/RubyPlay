@@ -47,6 +47,9 @@ GEM
     mimemagic (0.3.0)
     mini_portile2 (2.0.0)
     minitest (5.8.3)
+    net-scp (1.2.1)
+      net-ssh (>= 2.6.5)
+    net-ssh (3.0.1)
     nokogiri (1.6.7.1)
       mini_portile2 (~> 2.0.0.rc2)
     paperclip (4.3.2)
@@ -77,6 +80,7 @@ DEPENDENCIES
   activerecord
   aws-sdk (< 2.0)
   carrierwave
+  net-scp
   paperclip (>= 3.4, != 4.3.0)
   paperclip-rack
   rake

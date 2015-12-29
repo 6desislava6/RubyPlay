@@ -10,6 +10,7 @@ gem 'paperclip-rack', require: 'paperclip/rack'
 gem 'aws-sdk', '< 2.0', :require => 'paperclip'
 gem 'paperclip', ['>= 3.4', '!= 4.3.0']
 gem 'carrierwave'
+gem 'net-scp'
 
 group :development, :test do
   gem 'sqlite3'

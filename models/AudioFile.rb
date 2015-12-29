@@ -1,4 +1,4 @@
-require "paperclip"
+require 'paperclip'
 
 class AudioFile < ActiveRecord::Base
   include Paperclip::Glue

@@ -26,6 +26,8 @@ class SSHConnector
 
   def upload_song(local_name, dest_name)
     # .start(@host, @user,  :key_data => @keys, :keys_only => TRUE)
+    puts "EHOOOOOOOOOOOOOOOOOOOOo" + Dir.pwd
+    p Dir.pwd
     Net::SCP.start(@host, @user) do |scp|
       channel = scp.upload local_name, "./Desi/#{dest_name}"
       channel.wait
@@ -66,7 +68,7 @@ class SSHConnector
   end
 end
 
-
+'
 HOST = "10.42.0.136"
 USER = "pi"
 
@@ -86,7 +88,7 @@ ssh.pause_song
 #puts "paused!"
 ssh.pause_song
 sleep 3
-ssh.stop_song
+ssh.stop_song'
 #th.join
 
 
