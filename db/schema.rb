@@ -18,6 +18,7 @@ ActiveRecord::Schema.define(version: 20151228173648) do
     t.string   "title"
     t.string   "artist"
     t.string   "duration"
+    t.string   "original_title"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "file_file_name"

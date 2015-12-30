@@ -26,8 +26,6 @@ class SSHConnector
 
   def upload_song(local_name, dest_name)
     # .start(@host, @user,  :key_data => @keys, :keys_only => TRUE)
-    puts "EHOOOOOOOOOOOOOOOOOOOOo" + Dir.pwd
-    p Dir.pwd
     Net::SCP.start(@host, @user) do |scp|
       channel = scp.upload local_name, "./Desi/#{dest_name}"
       channel.wait
@@ -40,6 +38,7 @@ class SSHConnector
       ssh.exec "omxplayer -o local ./Desi/#{song_name} <fifo &"
       ssh.exec 'echo -n "" > fifo'
     end
+    remove_fifo
   end
 
   def pause_song

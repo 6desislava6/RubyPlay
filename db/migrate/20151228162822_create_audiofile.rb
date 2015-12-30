@@ -5,6 +5,7 @@ class CreateAudiofile < ActiveRecord::Migration
       t.string :title
       t.string :artist
       t.string :duration
+      t.string :original_title
       #t.name :name
       t.timestamps
     end
