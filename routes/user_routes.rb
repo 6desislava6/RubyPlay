@@ -4,6 +4,9 @@ require './models/User'
 require './models/AudioFile'
 require './models/Playlist'
 require 'paperclip'
+require 'warden'
+require 'sinatra/flash'
+
 
 require_relative '../controllers/ssh_connection'
 
@@ -11,6 +14,68 @@ class RubyPlay < Sinatra::Base
   register Sinatra::ActiveRecordExtension
   set :database, {adapter: 'sqlite3', database: 'ruby_play.sqlite3'}
   set :views, Proc.new { File.join(root, "../views") }
+
+  enable :sessions
+  register Sinatra::Flash
+
+  use Warden::Manager do |config|
+    config.serialize_into_session{|user| user.id }
+    config.serialize_from_session{|id| User.find(id) }
+    config.scope_defaults :default,
+      strategies: [:password],
+      action: 'auth'
+    config.failure_app = self
+  end
+
+  Warden::Manager.before_failure do |env,opts|
+    env['REQUEST_METHOD'] = 'POST'
+  end
+
+
+  Warden::Strategies.add(:password) do
+    def authenticate!
+      user = User.find_by(email: params['email'])
+      if user.nil?
+        fail!("The username you entered does not exist.")
+      elsif user.authenticate(params['password'])
+        success!(user)
+      else
+        fail!("Could not log in")
+      end
+    end
+  end
+
+  post '/login' do
+    env['warden'].authenticate!
+
+    flash[:success] = env['warden'].message
+
+    if session[:return_to].nil?
+      redirect '/files'
+    else
+      redirect session[:return_to]
+    end
+  end
+
+  get '/logout' do
+    env['warden'].raw_session.inspect
+    env['warden'].logout
+    flash[:success] = 'Successfully logged out'
+    redirect '/'
+  end
+
+  post '/unauthenticated' do
+    session[:return_to] = env['warden.options'][:attempted_path]
+    puts env['warden.options'][:attempted_path]
+    flash[:error] = env['warden'].message || "You must log in"
+    redirect '/login'
+  end
+
+  post "/auth" do
+    login_greeting = env['warden'].authenticated? ?
+                    "welcome #{env['warden'].user}!" :
+                    "not logged in"
+  end
 
   # just for debugging
   HOST = "10.42.0.136"
@@ -22,12 +87,11 @@ class RubyPlay < Sinatra::Base
 
   get '/users/:id' do
     @users = User.find_by_id(params[:id])
-    @users.name
+    @users.email
   end
 
   post "/new" do
-    @user = User.new
-    @user.name = params[:user_name]
+    @user = User.new({ email: params[:email], password: params[:password] })
     success = @user.save!
     if success
       redirect "users/#{@user.id}"
@@ -36,14 +100,11 @@ class RubyPlay < Sinatra::Base
     end
   end
 
-  get '/file_upload' do
-    erb :file_upload
-  end
-
   # uploads a song
   post '/file' do
     @audio_file = AudioFile.new
     @audio_file.title, @audio_file.original_title, @audio_file.file = make_params_upload(params)
+    @audio_file.user = env['warden'].user
     success = @audio_file.save
     if success
         { :status => "OK"}.to_json
@@ -54,7 +115,7 @@ class RubyPlay < Sinatra::Base
 
   # Displays all songs
   get '/files' do
-    @audio_files = AudioFile.all
+    @audio_files = AudioFile.all.select { |file| file.user == env['warden'].user }
     erb :all_audio_files
   end
 

@@ -1,5 +1,5 @@
-
-
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+<%= @user.email %> ID
 <form action="/files" method="POST" enctype="multipart/form-data">
     <div class="wrapper">
       <select size="3" class="selection" name = 'picked_song'>
@@ -8,9 +8,17 @@
           <% end %>
       </select>
     </div>
-    <input type="submit" value="Play">
+    <input type="submit" value="Load">
 </form>
 
 
-<a href="/pause_song">Pause</a>
-<a href="/stop_song">Stop</a>
+<a href="/pause_song"><i class="fa fa-pause"></i><i class="fa fa-play"></i></a>
+<a href="/stop_song"><i class="fa fa-stop"></i></a>
+
+
+<h1>Upload song</h1>
+
+<form action="/file" method="POST" enctype="multipart/form-data">
+    <input type="file" name="file">
+    <input type="submit" value="Upload song">
+</form>
