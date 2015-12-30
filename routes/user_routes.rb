@@ -75,6 +75,7 @@ class RubyPlay < Sinatra::Base
   end
 
   def play_song(params)
+    stop_song
     id = params[:picked_song].split(" ").first.to_i
     audio_file = AudioFile.find(id)
     path = make_path(id, audio_file)

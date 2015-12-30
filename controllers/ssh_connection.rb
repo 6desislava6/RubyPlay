@@ -38,31 +38,31 @@ class SSHConnector
       ssh.exec "omxplayer -o local ./Desi/#{song_name} <fifo &"
       ssh.exec 'echo -n "" > fifo'
     end
-    remove_fifo
   end
 
   def pause_song
     Net::SSH.start(@host, @user) do |ssh|
-      ssh.exec 'echo -n p >fifo'
+      ssh.exec! 'echo -n p >fifo'
     end
   end
 
   def stop_song
     Net::SSH.start(@host, @user) do |ssh|
-      ssh.exec 'echo -n q >fifo'
+      ssh.exec! 'echo -n q >fifo'
     end
     remove_fifo
   end
 
   def make_fifo
     Net::SSH.start(@host, @user) do |ssh|
+      ssh.exec 'if test -e "fifo";then  rm fifo; fi'
       ssh.exec 'mkfifo fifo'
     end
   end
 
   def remove_fifo
     Net::SSH.start(@host, @user)do |ssh|
-      ssh.exec 'rm fifo'
+      ssh.exec 'if test -e "fifo";then  rm fifo; fi'
     end
   end
 end
