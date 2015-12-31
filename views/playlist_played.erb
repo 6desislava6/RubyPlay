@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,7 +7,7 @@
 </head>
 <body>
   <header>
-    <form action="/search" method="POST" enctype="/">
+  <form action="/search" method="POST" enctype="/">
       <label for="search">Search:</label>
       <input type="text" name="search" />
       <input type="submit" value="Search">
@@ -20,18 +21,22 @@
     <a href="/make_playlist">Make Playlist</a>
     <a href="/all">All Audio Files</a>
   </nav>
+
   <section>
-    <form action="/playlists" method="POST" enctype="multipart/form-data">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    <form action="/play_song" method="POST" enctype="multipart/form-data">
         <div class="wrapper">
-          <select size="3" class="selection" name = 'picked_playlist'>
-              <% @playlists.each do |playlist| %>
-              <option value = <%= playlist.id %>><%= playlist.name %></option>
+        <p>Playlist: <%= @playlist.name %></p>
+          <select size="3" class="selection" name = 'picked_song'>
+              <% @audio_files.each do |file|%>
+              <option><%= file.id %> <%= file.original_title %></option>
               <% end %>
           </select>
         </div>
-        <input type="submit" value="Play playlist">
+        <input type="submit" value="Load">
     </form>
+    <a href="/pause_song"><i class="fa fa-pause"></i><i class="fa fa-play"></i></a>
+    <a href="/stop_song"><i class="fa fa-stop"></i></a>
   </section>
 </body>
 </html>
-

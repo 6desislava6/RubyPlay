@@ -38,6 +38,7 @@ class SSHConnector
       ssh.exec "omxplayer -o local ./Desi/#{song_name} <fifo &"
       ssh.exec 'echo -n "" > fifo'
     end
+    remove_fifo
   end
 
   def pause_song

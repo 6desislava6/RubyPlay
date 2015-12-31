@@ -1,13 +1,40 @@
-<p>Logged as: <%= @user.email %></p>
-<form action="/make_playlist" method="POST" enctype="/">
-    <div class="wrapper">
-      <select multiple size="3" class="selection" name = 'picked_songs[]'>
-          <% @audio_files.each do |file|%>
-          <option value = <%= file.id %>><%= file.id %> <%= file.original_title %></option>
-          <% end %>
-      </select>
-    </div>
-    <label for="name">name of the playlist</label>
-    <input type="text" name="name" />
-    <input type="submit" value="Load">
-</form>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>RubyPlay</title>
+</head>
+<body>
+  <header>
+  <form action="/search" method="POST" enctype="/">
+      <label for="search">Search:</label>
+      <input type="text" name="search" />
+      <input type="submit" value="Search">
+  </form>
+  <p>Logged as: <%= @user.email %></p>
+  <p><a href="/logout">Logout</a></p>
+  </header>
+
+  <section>
+      <nav>
+        <a href="/now_playing">Now Playing</a>
+        <a href="/playlists">Playlists</a>
+        <a href="/make_playlist">Make Playlist</a>
+        <a href="/all">All Audio Files</a>
+      </nav>
+      <form action="/make_playlist" method="POST" enctype="/">
+          <div class="wrapper">
+            <select multiple size="3" class="selection" name = 'picked_songs[]'>
+                <% @audio_files.each do |file|%>
+                <option value = <%= file.id %>><%= file.id %> <%= file.original_title %></option>
+                <% end %>
+            </select>
+          </div>
+          <label for="name">name of the playlist</label>
+          <input type="text" name="name" />
+          <input type="submit" value="Make playlist">
+      </form>
+  </section>
+</body>
+</html>
+

@@ -7,8 +7,6 @@ require './models/Playlistable'
 require 'paperclip'
 require 'warden'
 require 'sinatra/flash'
-
-
 require_relative '../controllers/ssh_connection'
 
 class RubyPlay < Sinatra::Base
@@ -18,6 +16,9 @@ class RubyPlay < Sinatra::Base
 
   enable :sessions
   register Sinatra::Flash
+
+  GlobalState = {}
+  GlobalState[:now_playing] = nil
 
   use Warden::Manager do |config|
     config.serialize_into_session{|user| user.id }
@@ -48,11 +49,9 @@ class RubyPlay < Sinatra::Base
 
   post '/login' do
     env['warden'].authenticate!
-
     flash[:success] = env['warden'].message
-
     if session[:return_to].nil?
-      redirect '/files'
+      redirect '/now_playing'
     else
       redirect session[:return_to]
     end
@@ -75,7 +74,7 @@ class RubyPlay < Sinatra::Base
   post "/auth" do
     login_greeting = env['warden'].authenticated? ?
                     "welcome #{env['warden'].user}!" :
-                    "not logged in"
+                    "not logged in :( sorry"
   end
 
   # just for debugging
@@ -112,39 +111,42 @@ class RubyPlay < Sinatra::Base
     @audio_file.user = env['warden'].user
     success = @audio_file.save
     if success
-        { :status => "OK"}.to_json
+        { :status => "OK" }.to_json
     else
-        { :status => "NOK"}.to_json
+        { :status => "NOK" }.to_json
     end
   end
-
   # Displays all songs
-  get '/files' do
+  get '/now_playing' do
     @user = env['warden'].user
-    @audio_files = AudioFile.all.select { |file| file.user == @user }
+    @audio_files = GlobalState[:now_playing].nil? ? @user.audio_files : GlobalState[:now_playing]
     erb :all_audio_files
   end
 
+  get '/all' do
+    GlobalState[:now_playing] = env['warden'].user.audio_files
+    redirect '/now_playing'
+  end
+
   #Plays a song
-  post '/files' do
+  post '/play_song' do
     play_song(params)
-    redirect '/files'
+    redirect '/now_playing'
   end
 
   get '/pause_song' do
     pause_song
-    redirect '/files'
+    redirect '/now_playing'
   end
 
   get '/stop_song' do
     stop_song
-    redirect '/files'
+    redirect '/now_playing'
   end
 
   get '/make_playlist' do
     @user = env['warden'].user
-    p @user
-    @audio_files = AudioFile.all.select { |file| file.user == @user }
+    @audio_files = @user.audio_files
     erb :make_playlist
   end
 
@@ -157,8 +159,26 @@ class RubyPlay < Sinatra::Base
   end
 
   get '/playlists' do
-    @playlists = Playlist.all
+    @user = env['warden'].user
+    @playlists = @user.playlists
     erb :playlists
+  end
+
+  post '/playlists' do
+    @user = env['warden'].user
+    @playlist = Playlist.find(params['picked_playlist'])
+    @audio_files = @playlist.audio_files
+    GlobalState[:now_playing] = @audio_files
+    erb :all_audio_files
+  end
+
+  post '/search' do
+    searched = params[:search]
+    @user = env['warden'].user
+    @audio_files = @user.audio_files.select do |file|
+     (file.title.include? searched) or (searched.include? file.title)
+    end
+    erb :searched
   end
 
   def make_playlist(audio_files, name)
