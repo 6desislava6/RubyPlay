@@ -3,6 +3,7 @@ require 'sinatra/activerecord'
 require './models/User'
 require './models/AudioFile'
 require './models/Playlist'
+require './models/Playlistable'
 require 'paperclip'
 require 'warden'
 require 'sinatra/flash'
@@ -85,6 +86,10 @@ class RubyPlay < Sinatra::Base
     erb :home
   end
 
+  post '/' do
+    params.to_json
+  end
+
   get '/users/:id' do
     @users = User.find_by_id(params[:id])
     @users.email
@@ -115,7 +120,8 @@ class RubyPlay < Sinatra::Base
 
   # Displays all songs
   get '/files' do
-    @audio_files = AudioFile.all.select { |file| file.user == env['warden'].user }
+    @user = env['warden'].user
+    @audio_files = AudioFile.all.select { |file| file.user == @user }
     erb :all_audio_files
   end
 
@@ -133,6 +139,37 @@ class RubyPlay < Sinatra::Base
   get '/stop_song' do
     stop_song
     redirect '/files'
+  end
+
+  get '/make_playlist' do
+    @user = env['warden'].user
+    p @user
+    @audio_files = AudioFile.all.select { |file| file.user == @user }
+    erb :make_playlist
+  end
+
+  post '/make_playlist' do
+    name = JSON.parse(params.to_json)['name']
+    ids = JSON.parse(params.to_json)['picked_songs'].map(&:to_i)
+    audio_files = AudioFile.all.select { |file| ids.include? file.id }
+    make_playlist(audio_files, name)
+    redirect '/playlists'
+  end
+
+  get '/playlists' do
+    @playlists = Playlist.all
+    erb :playlists
+  end
+
+  def make_playlist(audio_files, name)
+    playlist = Playlist.new(user: env['warden'].user, name: name)
+    audio_files.each do |file|
+      playlistable = Playlistable.new
+      playlistable.audio_file = file
+      playlistable.playlist = playlist
+      playlistable.save!
+    end
+    playlist.save!
   end
 
   def play_song(params)
@@ -167,3 +204,4 @@ class RubyPlay < Sinatra::Base
 end
 #@filename = params[:file][:filename]
     #params[:photo][:image] = params[:photo][:image][:tempfile] if params[:photo][:image]
+    #halt 401, "Not authorized\n" if !env['warden'].authenticated?

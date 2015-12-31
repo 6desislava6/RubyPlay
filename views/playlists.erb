@@ -1,0 +1,6 @@
+<% @playlists.each do |playlist| %>
+  <p><%= playlist.name %></p>
+  <% playlist.audio_files.each do |file| %>
+  <p> <%= file.title %></p>
+  <% end %>
+<% end %>

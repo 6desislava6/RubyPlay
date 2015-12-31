@@ -1,5 +1,5 @@
 <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
-<%= @user.email %> ID
+<p>Logged as: <%= @user.email %></p>
 <form action="/files" method="POST" enctype="multipart/form-data">
     <div class="wrapper">
       <select size="3" class="selection" name = 'picked_song'>

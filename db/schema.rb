@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151228173648) do
+ActiveRecord::Schema.define(version: 20151231081547) do
 
   create_table "audio_files", force: :cascade do |t|
     t.integer  "user_id"
@@ -25,6 +25,11 @@ ActiveRecord::Schema.define(version: 20151228173648) do
     t.string   "file_content_type"
     t.integer  "file_file_size"
     t.datetime "file_updated_at"
+  end
+
+  create_table "playlistables", force: :cascade do |t|
+    t.integer "playlist_id"
+    t.integer "audio_file_id"
   end
 
   create_table "playlists", force: :cascade do |t|

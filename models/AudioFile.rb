@@ -3,6 +3,12 @@ require 'paperclip'
 class AudioFile < ActiveRecord::Base
   include Paperclip::Glue
   belongs_to :user
+  #belongs_to :songable, polymorphic: true
+  has_many :playlistables
+  has_many :playlists, :through => :playlists
+
+  #config.active_record.raise_in_transactional_callbacks = true
+
     has_attached_file :file,
                     :url => "./system/:attachment/:id/:style/:basename.:extension",
                     :path => "./public/system/:attachment/:id/:style/:basename.:extension"
