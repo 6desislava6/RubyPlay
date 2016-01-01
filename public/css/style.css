@@ -127,17 +127,18 @@ select#audiofiles{
   font-size: 40px;
 }
 #upload{
-justify-content: center;
+  align-self:flex-end;
+  justify-content: center;
+  margin-bottom: 20px;
   display: flex;
   flex-direction: row;
-
+  width: 10%;
 }
 form>input[type="file"] {
     display: inline-block;
 }
 .main {
   padding-top: 25px;
-  background-color: rgba(0, 0, 0, 0.5);
 }
 body {
   margin-bottom: 150px;
@@ -167,4 +168,37 @@ li {
 }
 #songs {
   width: 60%;
+}
+footer {
+  height: 200px;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  padding-top: 40px;
+  padding-left: 40px;
+  color: white;
+  display: flex;
+  flex-direction: row;
+}
+#upload input {
+  padding: 10px;
+  border-radius: 10px;
+  color: white;
+  padding-left: 10px;
+  padding-right: 10px;
+  background-color: #CE1D35;
+  border: 0px;
+}
+#upload input[type="submit"] {
+  border: 1px solid #000;
+}
+
+#search-results {
+  display: flex;
+  justify-content: center;
+  font-size: 24px;
+  font-weight: bold;
+  color: white;
+}
+#blank {
+  height: 150px;
 }

@@ -22,7 +22,16 @@
           </div>
         </div>
   </header>
+  <p id="search-results">Now playing...</p>
   <section class = "main rowed">
+
+
+      <div id="upload" class="rowed">
+      <form action="/file" method="POST" enctype="multipart/form-data">
+          <input type="file" name="file">
+          <input type="submit" value="Upload song">
+      </form>
+    </div>
       <nav>
       <ul id="navigation" class="nav nav-pills nav-stacked">
         <li role="presentation" class="active"><a href="/now_playing">Now Playing</a></li>
@@ -42,20 +51,19 @@
                 <% end %>
             </select>
           </div>
-          <input type="submit" id="load" value="Load">
+          <input type="submit" id="load" value="Load And Play Song">
       </form>
       <div>
         <a id="play" href="/pause_song"><i class="fa fa-pause"></i><i class="fa fa-play"></i></a>
         <a id="pause" href="/stop_song"><i class="fa fa-stop"></i></a>
       </div>
-
-      <div id="upload" class="rowed">
-        <form action="/file" method="POST" enctype="multipart/form-data">
-            <input type="file" name="file">
-            <input type="submit" value="Upload song">
-        </form>
-      </div>
     </section>
+
   </section>
+  <footer>
+    <div>
+      Някакви глупости тук...
+    </div>
+  </footer>
 </body>
 </html>

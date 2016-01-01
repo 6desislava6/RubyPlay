@@ -6,10 +6,11 @@
   <link rel="stylesheet" type="text/css" href="<%= url('css/style.css') %>">
 
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
 </head>
 <body id="body">
   <header>
-        <img src="<%= url('RubyPlay.png') %>" class="col-xs-2 col-md-2"><!-- -->
+        <img src="<%= url('RubyPlay-dots.png') %>" class="col-xs-2 col-md-2"><!-- -->
         <div class ="search-log col-xs-14 col-md-10">
             <form class="col-xs-12 col-md-9 rowed " action="/search" method="POST" enctype="/">
             <input class ="form-control" type="text" name="search" placeholder="Search here..." /><!--
@@ -21,9 +22,19 @@
           </div>
         </div>
   </header>
+    <p id="search-results">Make a playlst - select the audio files you want:</p>
+
   <section class = "main rowed">
+
+
+      <div id="upload" class="rowed">
+      <form action="/file" method="POST" enctype="multipart/form-data">
+          <input type="file" name="file">
+          <input type="submit" value="Upload song">
+      </form>
+    </div>
       <nav>
-      <ul class="nav nav-pills nav-stacked">
+      <ul id="navigation" class="nav nav-pills nav-stacked">
         <li role="presentation" class="active"><a href="/now_playing">Now Playing</a></li>
         <li role="presentation"><a href="/playlists">Playlists</a></li>
         <li role="presentation"><a href="/make_playlist">Make Playlist</a></li>
@@ -31,8 +42,10 @@
       </ul>
     </nav>
 
-    <section>
+    <section id="songs">
+
       <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
       <form action="/playlists" method="POST" enctype="multipart/form-data">
         <div class="wrapper">
           <select id="audiofiles" size="3" class="selection" name = 'picked_playlist'>
@@ -41,23 +54,27 @@
               <% end %>
           </select>
         </div>
-        <input type="submit" value="Play playlist">
+        <input type="submit" id="load" value="Play playlist">
       </form>
-      <div>
-        <a id="play" href="/pause_song"><i class="fa fa-pause"></i><i class="fa fa-play"></i></a>
-        <a id="pause" href="/stop_song"><i class="fa fa-stop"></i></a>
-      </div>
+      <div id="blank">
 
-      <div id="upload" class="rowed">
-        <form action="/file" method="POST" enctype="multipart/form-data">
-            <input type="file" name="file">
-            <input type="submit" value="Upload song">
-        </form>
       </div>
     </section>
+
   </section>
+  <footer>
+    <div>
+      Някакви глупости тук...
+    </div>
+  </footer>
 </body>
 </html>
+
+
+
+
+
+
 
 
 

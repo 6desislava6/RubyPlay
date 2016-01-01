@@ -6,6 +6,7 @@
   <link rel="stylesheet" type="text/css" href="<%= url('css/style.css') %>">
 
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
 </head>
 <body id="body">
   <header>
@@ -21,9 +22,19 @@
           </div>
         </div>
   </header>
+    <p id="search-results">Search results:</p>
+
   <section class = "main rowed">
+
+
+      <div id="upload" class="rowed">
+      <form action="/file" method="POST" enctype="multipart/form-data">
+          <input type="file" name="file">
+          <input type="submit" value="Upload song">
+      </form>
+    </div>
       <nav>
-      <ul class="nav nav-pills nav-stacked">
+      <ul id="navigation" class="nav nav-pills nav-stacked">
         <li role="presentation" class="active"><a href="/now_playing">Now Playing</a></li>
         <li role="presentation"><a href="/playlists">Playlists</a></li>
         <li role="presentation"><a href="/make_playlist">Make Playlist</a></li>
@@ -31,32 +42,31 @@
       </ul>
     </nav>
 
-    <section>
+    <section id="songs">
+
       <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
-          <form action="/play_song" method="POST" enctype="multipart/form-data">
+      <form action="/play_song" method="POST" enctype="multipart/form-data">
         <div class="wrapper">
-        <p>Search results:</p>
           <select id="audiofiles" size="3" class="selection" name = 'picked_song'>
               <% @audio_files.each do |file|%>
               <option><%= file.id %> <%= file.original_title %></option>
               <% end %>
           </select>
         </div>
-        <input type="submit" value="Load">
-    </form>
+        <input type="submit" id="load" value="Load And Play Song">
+      </form>
       <div>
         <a id="play" href="/pause_song"><i class="fa fa-pause"></i><i class="fa fa-play"></i></a>
         <a id="pause" href="/stop_song"><i class="fa fa-stop"></i></a>
       </div>
-
-      <div id="upload" class="rowed">
-        <form action="/file" method="POST" enctype="multipart/form-data">
-            <input type="file" name="file">
-            <input type="submit" value="Upload song">
-        </form>
-      </div>
     </section>
+
   </section>
+  <footer>
+    <div>
+      Някакви глупости тук...
+    </div>
+  </footer>
 </body>
 </html>
 

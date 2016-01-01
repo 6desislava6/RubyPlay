@@ -6,10 +6,11 @@
   <link rel="stylesheet" type="text/css" href="<%= url('css/style.css') %>">
 
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
 </head>
 <body id="body">
   <header>
-        <img src="<%= url('RubyPlay.png') %>" class="col-xs-2 col-md-2"><!-- -->
+        <img src="<%= url('RubyPlay-dots.png') %>" class="col-xs-2 col-md-2"><!-- -->
         <div class ="search-log col-xs-14 col-md-10">
             <form class="col-xs-12 col-md-9 rowed " action="/search" method="POST" enctype="/">
             <input class ="form-control" type="text" name="search" placeholder="Search here..." /><!--
@@ -17,22 +18,23 @@
           </form>
           <div class="login-logout col-xs-4 col-md-3 rowed">
             <p><%= @user.email %></p>
-            <p><div class="btn-group">
-                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  Action <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu">
-                  <li><a href="/logout">Logout</a></li>
-                  <li><a href="#">Contacts</a></li>
-                  <li><a href="#">About us/me :D</a></li>
-                </ul>
-              </div>
+            <p><a href="/logout">Logout</a></p>
           </div>
         </div>
   </header>
+    <p id="search-results">Make a playlst - select the audio files you want:</p>
+
   <section class = "main rowed">
+
+
+      <div id="upload" class="rowed">
+      <form action="/file" method="POST" enctype="multipart/form-data">
+          <input type="file" name="file">
+          <input type="submit" value="Upload song">
+      </form>
+    </div>
       <nav>
-      <ul class="nav nav-pills nav-stacked">
+      <ul id="navigation" class="nav nav-pills nav-stacked">
         <li role="presentation" class="active"><a href="/now_playing">Now Playing</a></li>
         <li role="presentation"><a href="/playlists">Playlists</a></li>
         <li role="presentation"><a href="/make_playlist">Make Playlist</a></li>
@@ -40,8 +42,10 @@
       </ul>
     </nav>
 
-    <section>
+    <section id="songs">
+
       <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
       <form action="/make_playlist" method="POST" enctype="/">
         <div class="wrapper">
           <select id="audiofiles" multiple size="3" class="selection" name = 'picked_songs[]'>
@@ -54,15 +58,21 @@
         <input type="text" name="name" />
         <input type="submit" value="Make playlist">
       </form>
-      <div id="upload" class="rowed">
-        <form action="/file" method="POST" enctype="multipart/form-data">
-            <input type="file" name="file">
-            <input type="submit" value="Upload song">
-        </form>
+      <div id="blank">
+
       </div>
     </section>
+
   </section>
+  <footer>
+    <div>
+      Някакви глупости тук...
+    </div>
+  </footer>
 </body>
 </html>
+
+
+
 
 
