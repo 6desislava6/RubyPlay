@@ -13,6 +13,7 @@ class RubyPlay < Sinatra::Base
   register Sinatra::ActiveRecordExtension
   set :database, {adapter: 'sqlite3', database: 'ruby_play.sqlite3'}
   set :views, Proc.new { File.join(root, "../views") }
+  set :public, Proc.new { File.join(root, "../public") }
 
   enable :sessions
   register Sinatra::Flash

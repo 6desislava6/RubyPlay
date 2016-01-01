@@ -1,0 +1,170 @@
+* {
+margin: 0;
+padding: 0;
+}
+
+header {
+  align-content: right;
+  display: flex;
+
+
+}
+.login-logout {
+  color: white;
+  text-align: right;
+}
+
+header {
+  display: flex; /* or inline-flex */
+  justify-content: space-between;
+  widht: 100%;
+}
+
+.search-bar {
+  border-radius: 10px 0px 0px 10px;
+  width: 90%;
+  flex-grow: 2; /* default 0 */
+}
+
+body {
+  display: flex; /* or inline-flex */
+  flex-direction: column;
+}
+.search-log {
+  border-radius: 8px;
+  padding-top: 6px;
+  padding-bottom: 6px;
+
+   background-color: rgba(0, 0, 0, 0.5);
+}
+.search-ascii {
+  padding-right: 10px;
+  padding-left: 10px;
+}
+.rowed {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+nav>.nav-pills > li.active > a, .nav-pills > li.active > a:focus, .nav-pills > li.active > a:hover {
+    color: #FFF;
+    background-color: #CE1D35;
+
+}
+
+li>a {
+ color: red;
+}
+
+section>section {
+  align-self: center;
+  text-align: center;
+  align-content: center;
+
+}
+
+section>nav {
+
+}
+
+.wrapper {
+  display: flex;
+  text-align: center;
+  flex-direction: column;
+  justify-content: center;
+}
+
+form .form-control {
+    color: white;
+    margin: auto;
+    display: block;
+    width: 100%;
+    height: 34px;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.42857;
+    background-color:  rgba(14, 0, 0, 0.69);;
+    border: 0;
+    border-radius: 4px 0px 0px 4px;
+    box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075) inset;
+    transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+}
+
+select#audiofiles{
+  height: 400px;
+  margin: auto;
+  display: block;
+  width: 100%;
+  padding: 10px 20px;
+  font-size: 14px;
+  line-height: 1.42857;
+  color: #555;
+  background-image: none;
+  border: 1px;
+  box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075) inset;
+  transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+  background-color: rgba(0, 0, 0, 0.8);
+}
+#load {
+  font-weight: 6;
+  font-size: 16px;
+  color: white;
+  width: 100%;
+  background-color: rgba(255, 13, 13, 0.5);;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-radius: 6px;
+  border: 0;
+}
+
+#play {
+  font-size: 70px;
+  color: #CE1D35;
+}
+#pause {
+  color: #CE1D35;
+  font-size: 40px;
+}
+#upload{
+justify-content: center;
+  display: flex;
+  flex-direction: row;
+
+}
+form>input[type="file"] {
+    display: inline-block;
+}
+.main {
+  padding-top: 25px;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+body {
+  margin-bottom: 150px;
+  background-repeat: no-repeat;
+  background-image: url("../ruby-background.jpg");
+    background-attachment: fixed;
+    background-position: center;
+
+}
+#audiofiles>option {
+  color: white;
+
+}
+ul {
+  padding: 10px;
+  border-radius: 10px 0px 0px 10px;
+  background-color: rgba(0, 0, 0, 0.8);
+}
+li {
+  padding-left: 30px;
+  padding-right: 30px;
+}
+
+#navigation {
+  padding-top: 55px;
+  padding-bottom: 179px;
+}
+#songs {
+  width: 60%;
+}

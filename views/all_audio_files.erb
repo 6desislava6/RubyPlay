@@ -3,46 +3,59 @@
 <head>
   <meta charset="UTF-8">
   <title>RubyPlay</title>
+  <link rel="stylesheet" type="text/css" href="<%= url('css/style.css') %>">
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
 </head>
-<body>
+<body id="body">
   <header>
-    <form action="/search" method="POST" enctype="/">
-      <label for="search">Search:</label>
-      <input type="text" name="search" />
-      <input type="submit" value="Search">
-  </form>
-  <p>Logged as: <%= @user.email %></p>
-  <p><a href="/logout">Logout</a></p>
-  </header>
-  <nav>
-    <a href="/now_playing">Now Playing</a>
-    <a href="/playlists">Playlists</a>
-    <a href="/make_playlist">Make Playlist</a>
-    <a href="/all">All Audio Files</a>
-  </nav>
-
-  <section>
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
-    <form action="/play_song" method="POST" enctype="multipart/form-data">
-        <div class="wrapper">
-          <select size="3" class="selection" name = 'picked_song'>
-              <% @audio_files.each do |file|%>
-              <option><%= file.id %> <%= file.original_title %></option>
-              <% end %>
-          </select>
+        <img src="<%= url('RubyPlay-dots.png') %>" class="col-xs-2 col-md-2"><!-- -->
+        <div class ="search-log col-xs-14 col-md-10">
+            <form class="col-xs-12 col-md-9 rowed " action="/search" method="POST" enctype="/">
+            <input class ="form-control" type="text" name="search" placeholder="Search here..." /><!--
+             --><input type="submit" value="🔎" class="search-ascii" >
+          </form>
+          <div class="login-logout col-xs-4 col-md-3 rowed">
+            <p><%= @user.email %></p>
+            <p><a href="/logout">Logout</a></p>
+          </div>
         </div>
-        <input type="submit" value="Load">
-    </form>
-    <a href="/pause_song"><i class="fa fa-pause"></i><i class="fa fa-play"></i></a>
-    <a href="/stop_song"><i class="fa fa-stop"></i></a>
+  </header>
+  <section class = "main rowed">
+      <nav>
+      <ul id="navigation" class="nav nav-pills nav-stacked">
+        <li role="presentation" class="active"><a href="/now_playing">Now Playing</a></li>
+        <li role="presentation"><a href="/playlists">Playlists</a></li>
+        <li role="presentation"><a href="/make_playlist">Make Playlist</a></li>
+        <li role="presentation"><a href="/all">All Audio Files</a></li>
+      </ul>
+    </nav>
 
+    <section id="songs">
+      <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+      <form  action="/play_song" method="POST" enctype="multipart/form-data">
+          <div class="wrapper">
+            <select id="audiofiles" size="18" class="selection" name = 'picked_song'>
+                <% @audio_files.each do |file|%>
+                <option><%= file.id %> <%= file.original_title %></option>
+                <% end %>
+            </select>
+          </div>
+          <input type="submit" id="load" value="Load">
+      </form>
+      <div>
+        <a id="play" href="/pause_song"><i class="fa fa-pause"></i><i class="fa fa-play"></i></a>
+        <a id="pause" href="/stop_song"><i class="fa fa-stop"></i></a>
+      </div>
 
-    <h1>Upload song</h1>
-
-    <form action="/file" method="POST" enctype="multipart/form-data">
-        <input type="file" name="file">
-        <input type="submit" value="Upload song">
-    </form>
+      <div id="upload" class="rowed">
+        <form action="/file" method="POST" enctype="multipart/form-data">
+            <input type="file" name="file">
+            <input type="submit" value="Upload song">
+        </form>
+      </div>
+    </section>
   </section>
 </body>
 </html>
