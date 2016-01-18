@@ -120,8 +120,11 @@ class RubyPlay < Sinatra::Base
   # Displays all songs
   get '/now_playing' do
     @user = env['warden'].user
+    # exception, ако не е логнат
     @audio_files = GlobalState[:now_playing].nil? ? @user.audio_files : GlobalState[:now_playing]
-    erb :all_audio_files
+    erb :main_layout, :layout => false do
+      erb :all_audio_files
+    end
   end
 
   get '/all' do
@@ -148,7 +151,9 @@ class RubyPlay < Sinatra::Base
   get '/make_playlist' do
     @user = env['warden'].user
     @audio_files = @user.audio_files
-    erb :make_playlist
+    erb :main_layout, layout: false do
+      erb :make_playlist
+    end
   end
 
   post '/make_playlist' do
@@ -162,15 +167,16 @@ class RubyPlay < Sinatra::Base
   get '/playlists' do
     @user = env['warden'].user
     @playlists = @user.playlists
-    erb :playlists
+    erb :main_layout, :layout => false do
+      erb :playlists
+    end
   end
 
   post '/playlists' do
     @user = env['warden'].user
-    @playlist = Playlist.find(params['picked_playlist'])
-    @audio_files = @playlist.audio_files
+    playlist = Playlist.find(params['picked_playlist'])
+    @audio_files = playlist.audio_files
     GlobalState[:now_playing] = @audio_files
-    erb :all_audio_files
   end
 
   post '/search' do
@@ -179,7 +185,9 @@ class RubyPlay < Sinatra::Base
     @audio_files = @user.audio_files.select do |file|
      (file.title.include? searched) or (searched.include? file.title)
     end
-    erb :searched
+    erb :main_layout, :layout => false do
+      erb :searched
+    end
   end
 
   def make_playlist(audio_files, name)
