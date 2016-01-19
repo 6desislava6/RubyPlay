@@ -3,13 +3,11 @@ require 'net/ssh'
 
 # Registers the raspberry
 class SSHRegisterRaspberry
-
-  TEMPLATE = "cat ~/.ssh/id_rsa.pub | ssh %{user}@%{host} 'cat >> .ssh/authorized_keys'"
+  TEMPLATE = "cat ~/.ssh/id_rsa.pub | sshpass -p %{password} ssh %{user}@%{host} 'cat >> .ssh/authorized_keys'"
   class << self
     def register_raspberry(host, user, password)
-      Net::SSH.start(host, user, password: password) do |ssh|
-        ssh.exec TEMPLATE % { user: user, host: host }
-      end
+      p TEMPLATE % { user: user, host: host, password: password }
+      command = system(TEMPLATE % { user: user, host: host, password: password })
     end
   end
   # after registering the raspberry no more passwords will be required
@@ -44,6 +42,18 @@ class SSHConnector
   def pause_song
     Net::SSH.start(@host, @user) do |ssh|
       ssh.exec! 'echo -n p >fifo'
+    end
+  end
+
+  def sound_down
+    Net::SSH.start(@host, @user) do |ssh|
+      ssh.exec! 'echo -n - >fifo'
+    end
+  end
+
+  def sound_up
+    Net::SSH.start(@host, @user) do |ssh|
+      ssh.exec! 'echo -n + >fifo'
     end
   end
 

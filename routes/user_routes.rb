@@ -8,6 +8,8 @@ require 'paperclip'
 require 'warden'
 require 'sinatra/flash'
 require_relative '../controllers/ssh_connection'
+require_relative '../controllers/player'
+
 
 class RubyPlay < Sinatra::Base
   register Sinatra::ActiveRecordExtension
@@ -78,10 +80,6 @@ class RubyPlay < Sinatra::Base
                     "not logged in :( sorry"
   end
 
-  # just for debugging
-  HOST = "10.42.0.136"
-  USER = "pi"
-
   get '/' do
     erb :home
   end
@@ -134,17 +132,27 @@ class RubyPlay < Sinatra::Base
 
   #Plays a song
   post '/play_song' do
-    play_song(params)
+    Player.play_song(params)
     redirect '/now_playing'
   end
 
   get '/pause_song' do
-    pause_song
+    Player.pause_song
+    redirect '/now_playing'
+  end
+
+  get '/sound_down' do
+    Player.sound_down
+    redirect '/now_playing'
+  end
+
+  get '/sound_up' do
+    Player.sound_up
     redirect '/now_playing'
   end
 
   get '/stop_song' do
-    stop_song
+    Player.stop_song
     redirect '/now_playing'
   end
 
@@ -160,7 +168,7 @@ class RubyPlay < Sinatra::Base
     name = JSON.parse(params.to_json)['name']
     ids = JSON.parse(params.to_json)['picked_songs'].map(&:to_i)
     audio_files = AudioFile.all.select { |file| ids.include? file.id }
-    make_playlist(audio_files, name)
+    Player.make_playlist(audio_files, name, env['warden'].user)
     redirect '/playlists'
   end
 
@@ -185,43 +193,23 @@ class RubyPlay < Sinatra::Base
     @audio_files = @user.audio_files.select do |file|
      (file.title.include? searched) or (searched.include? file.title)
     end
-    erb :main_layout, :layout => false do
+    erb :main_layout, layout: false do
       erb :searched
     end
+    
   end
 
-  def make_playlist(audio_files, name)
-    playlist = Playlist.new(user: env['warden'].user, name: name)
-    audio_files.each do |file|
-      playlistable = Playlistable.new
-      playlistable.audio_file = file
-      playlistable.playlist = playlist
-      playlistable.save!
+  get '/register_raspberry' do
+    @user = env['warden'].user
+    erb :main_layout, layout: false do
+      erb :register_raspberry
     end
-    playlist.save!
   end
 
-  def play_song(params)
-    stop_song
-    id = params[:picked_song].split(" ").first.to_i
-    audio_file = AudioFile.find(id)
-    path = make_path(id, audio_file)
-
-    ssh = SSHConnector.new(HOST, USER, [])
-    ssh.upload_song(path, audio_file.title)
-    Thread.new { ssh.play_song(audio_file.title) }
-  end
-
-  def make_path(id, audio_file)
-    "./public/system/files/#{id}/original/" + audio_file.file_file_name + '.'
-  end
-
-  def pause_song
-    SSHConnector.new(HOST, USER, []).pause_song
-  end
-
-  def stop_song
-    SSHConnector.new(HOST, USER, []).stop_song
+  post '/register_raspberry' do
+    @user = env['warden'].user
+    host, user, password = params[:host], params[:user], params[:password] 
+    SSHRegisterRaspberry.register_raspberry(host, user, password)
   end
 
   def make_params_upload(params)
