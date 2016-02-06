@@ -105,6 +105,7 @@ select#audiofiles{
   box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075) inset;
   transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
   background-color: rgba(0, 0, 0, 0.8);
+  height: 441px;
 }
 #load {
   font-weight: 6;
@@ -122,7 +123,7 @@ select#audiofiles{
   font-size: 70px;
   color: #CE1D35;
 }
-#pause {
+#pause, #sound_up, #sound_down {
   color: #CE1D35;
   font-size: 40px;
 }
@@ -132,7 +133,6 @@ select#audiofiles{
   margin-bottom: 20px;
   display: flex;
   flex-direction: row;
-  width: 10%;
 }
 form>input[type="file"] {
     display: inline-block;
@@ -201,4 +201,9 @@ footer {
 }
 #blank {
   height: 150px;
+}
+
+#name_of_playlist {
+  color: white;
+  background-color: rgba(0, 0, 0, 0.5);
 }

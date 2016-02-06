@@ -28,7 +28,7 @@ class RubyPlay < Sinatra::Base
     config.serialize_from_session{|id| User.find(id) }
     config.scope_defaults :default,
       strategies: [:password],
-      action: 'auth'
+      action: 'unauthenticated'
     config.failure_app = self
   end
 
@@ -51,9 +51,9 @@ class RubyPlay < Sinatra::Base
   end
 
   post '/login' do
-    env['warden'].authenticate!
+    authenticated = env['warden'].authenticate!
     flash[:success] = env['warden'].message
-    if session[:return_to].nil?
+    if session[:return_to].nil? or authenticated
       redirect '/now_playing'
     else
       redirect session[:return_to]
@@ -71,7 +71,7 @@ class RubyPlay < Sinatra::Base
     session[:return_to] = env['warden.options'][:attempted_path]
     puts env['warden.options'][:attempted_path]
     flash[:error] = env['warden'].message || "You must log in"
-    redirect '/login'
+    redirect '/', 307
   end
 
   post "/auth" do
@@ -81,11 +81,15 @@ class RubyPlay < Sinatra::Base
   end
 
   get '/' do
-    erb :home
+    erb :home_layout, :layout => false do
+      ''
+    end
   end
 
   post '/' do
-    params.to_json
+    erb :home_layout, :layout => false do
+      erb :unsuccessful_login
+    end
   end
 
   get '/users/:id' do
@@ -196,7 +200,7 @@ class RubyPlay < Sinatra::Base
     erb :main_layout, layout: false do
       erb :searched
     end
-    
+
   end
 
   get '/register_raspberry' do
@@ -208,7 +212,7 @@ class RubyPlay < Sinatra::Base
 
   post '/register_raspberry' do
     @user = env['warden'].user
-    host, user, password = params[:host], params[:user], params[:password] 
+    host, user, password = params[:host], params[:user], params[:password]
     SSHRegisterRaspberry.register_raspberry(host, user, password)
   end
 

@@ -23,14 +23,6 @@
         </div>
   </header>
   <section class = "main rowed">
-
-
-      <div id="upload" class="rowed">
-      <form action="/file" method="POST" enctype="multipart/form-data">
-          <input type="file" name="file">
-          <input type="submit" value="Upload song">
-      </form>
-    </div>
       <nav>
       <ul id="navigation" class="nav nav-pills nav-stacked">
         <li role="presentation" class="active"><a href="/now_playing">Now Playing</a></li>
@@ -45,7 +37,15 @@
        <%= yield %>
     </section>
 
+    </div>
   </section>
+
+    <div id="upload" class="rowed">
+      <form action="/file" method="POST" enctype="multipart/form-data">
+          <input type="file" name="file">
+          <input type="submit" value="Upload song">
+      </form>
+    </div>
   <footer>
     <div>
       Някакви глупости тук...
