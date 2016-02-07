@@ -2,9 +2,7 @@
 <form action="/playlists" method="POST" enctype="multipart/form-data">
   <div class="wrapper">
     <select id="audiofiles" size="3" class="selection" name = 'picked_playlist'>
-        <% @playlists.each do |playlist| %>
-        <option value = <%= playlist.id %>><%= playlist.name %></option>
-        <% end %>
+      <%= audio_files_playlist(@playlists) %>
     </select>
   </div>
   <input type="submit" id="load" value="Play playlist">

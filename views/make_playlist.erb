@@ -2,9 +2,7 @@
 <form action="/make_playlist" method="POST" enctype="/">
   <div class="wrapper">
   <select id="audiofiles" multiple size="3" class="selection" name = 'picked_songs[]'>
-    <% @audio_files.each do |file|%>
-    <option value = <%= file.id %>><%= file.id %> <%= file.original_title %></option>
-    <% end %>
+      <%= audio_files_make_playlsit(@audio_files) %>
   </select>
   </div>
   <div id="name_of_playlist">

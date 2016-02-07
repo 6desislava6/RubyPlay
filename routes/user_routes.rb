@@ -9,9 +9,11 @@ require 'warden'
 require 'sinatra/flash'
 require_relative '../controllers/ssh_connection'
 require_relative '../controllers/player'
+require_relative '../helpers/SiteHelper'
 
 
 class RubyPlay < Sinatra::Base
+  helpers SiteHelper
   register Sinatra::ActiveRecordExtension
   set :database, { adapter: 'sqlite3', database: 'ruby_play.sqlite3' }
   set :views, Proc.new { File.join(root, "../views") }
@@ -235,4 +237,3 @@ class RubyPlay < Sinatra::Base
     end
   end
 end
-
