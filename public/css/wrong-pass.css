@@ -1,0 +1,4 @@
+.sign > input["text"] {
+  border-width: 3px;
+  border-color: red;
+}

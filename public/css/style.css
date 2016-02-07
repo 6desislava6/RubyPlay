@@ -64,9 +64,6 @@ section>section {
 
 }
 
-section>nav {
-
-}
 
 .wrapper {
   display: flex;
@@ -112,7 +109,7 @@ select#audiofiles{
   font-size: 16px;
   color: white;
   width: 100%;
-  background-color: rgba(255, 13, 13, 0.5);;
+  background-color: rgba(255, 13, 13, 0.5);
   padding-top: 10px;
   padding-bottom: 10px;
   border-radius: 6px;
@@ -206,4 +203,12 @@ footer {
 #name_of_playlist {
   color: white;
   background-color: rgba(0, 0, 0, 0.5);
+}
+#logout-link {
+  margin-top: 10px;
+  background-color: rgba(255, 13, 13, 0.5);
+  margin-left: 20px;
+  padding: 10px;
+  color: white;
+  border-radius: 10px;
 }

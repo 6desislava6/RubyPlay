@@ -13,7 +13,7 @@ require_relative '../controllers/player'
 
 class RubyPlay < Sinatra::Base
   register Sinatra::ActiveRecordExtension
-  set :database, {adapter: 'sqlite3', database: 'ruby_play.sqlite3'}
+  set :database, { adapter: 'sqlite3', database: 'ruby_play.sqlite3' }
   set :views, Proc.new { File.join(root, "../views") }
   set :public, Proc.new { File.join(root, "../public") }
 
@@ -74,15 +74,13 @@ class RubyPlay < Sinatra::Base
     redirect '/', 307
   end
 
-  post "/auth" do
-    login_greeting = env['warden'].authenticated? ?
-                    "welcome #{env['warden'].user}!" :
-                    "not logged in :( sorry"
-  end
-
   get '/' do
-    erb :home_layout, :layout => false do
-      ''
+    if env['warden'].user.nil?
+      erb :home_layout, :layout => false do
+        ''
+      end
+    else
+      redirect '/now_playing'
     end
   end
 
@@ -99,12 +97,20 @@ class RubyPlay < Sinatra::Base
 
   post "/new" do
     @user = User.new({ email: params[:email], password: params[:password] })
-    success = @user.save!
-    if success
-      redirect "users/#{@user.id}"
-    else
-      erb :new
+    begin
+      success = @user.save!
+      if success
+        redirect "users/#{@user.id}"
+      else
+        erb :new
+      end
+    rescue ActiveRecord::RecordInvalid => invalid
+      redirect '/invalid_user'
     end
+  end
+
+  get '/invalid_user' do
+    erb :invalid_user
   end
 
   # uploads a song
@@ -119,10 +125,11 @@ class RubyPlay < Sinatra::Base
         { :status => "NOK" }.to_json
     end
   end
-  # Displays all songs
+
   get '/now_playing' do
+    redirect_not_logged_in
     @user = env['warden'].user
-    # exception, ако не е логнат
+
     @audio_files = GlobalState[:now_playing].nil? ? @user.audio_files : GlobalState[:now_playing]
     erb :main_layout, :layout => false do
       erb :all_audio_files
@@ -134,7 +141,6 @@ class RubyPlay < Sinatra::Base
     redirect '/now_playing'
   end
 
-  #Plays a song
   post '/play_song' do
     Player.play_song(params)
     redirect '/now_playing'
@@ -189,6 +195,7 @@ class RubyPlay < Sinatra::Base
     playlist = Playlist.find(params['picked_playlist'])
     @audio_files = playlist.audio_files
     GlobalState[:now_playing] = @audio_files
+    redirect '/now_playing'
   end
 
   post '/search' do
@@ -217,12 +224,15 @@ class RubyPlay < Sinatra::Base
   end
 
   def make_params_upload(params)
-    #title, original title, file
     [URI.escape(params[:file][:filename].gsub(' ', '')),
     params[:file][:filename],
     params[:file][:tempfile]]
   end
+
+  def redirect_not_logged_in
+    if env['warden'].user.nil?
+      redirect '/'
+    end
+  end
 end
-#@filename = params[:file][:filename]
-    #params[:photo][:image] = params[:photo][:image][:tempfile] if params[:photo][:image]
-    #halt 401, "Not authorized\n" if !env['warden'].authenticated?
+

@@ -12,8 +12,10 @@ body {
   align-self:center;
   display: flex;
   flex-direction: row;
+  justify-content: center;
 
 }
+
 #logo {
   display: flex;
   flex-direction: column;
@@ -69,4 +71,21 @@ input[type="submit"] {
 #sign-in input[type="submit"]{
   background-color: rgba(215, 20, 44, 0.7);
 
+}
+#unathenticated {
+  text-align: center;
+  color: red;
+}
+#back {
+  background-color: rgba(215, 20, 44, 0.7);
+  width: 20%;
+  align-self: center;
+  margin-top: 30px;
+  padding: 10px;
+  font-size: 20px;
+  text-align: center;
+
+}
+#back > a{
+  color: white;
 }

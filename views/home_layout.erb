@@ -15,10 +15,10 @@
     </div>
 
   <article id="log">
-    <section id="unathenticated">
-       <%= yield %>
-    </section>
     <section id="sign-in" class="logable">
+        <div id="unathenticated">
+       <%= yield %>
+      </div>
       <h1 class="sign">Sign in</h1>
       <form method="POST" action="/login">
         <label for="email">email</label>
