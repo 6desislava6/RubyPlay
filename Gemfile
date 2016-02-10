@@ -13,6 +13,13 @@ gem 'net-scp'
 gem 'bcrypt', :require => 'bcrypt' 
 gem 'warden'
 gem 'sinatra-flash'
+
 group :development, :test do
   gem 'sqlite3'
+end
+
+group :test do
+  gem 'rspec'
+  gem 'factory_girl'
+  gem 'database_cleaner'
 end

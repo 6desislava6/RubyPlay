@@ -201,8 +201,15 @@ footer {
 }
 
 #name_of_playlist {
-  color: white;
+  padding: 10px;
   background-color: rgba(0, 0, 0, 0.5);
+}
+#name_of_playlist > input[type="submit"]{
+  padding: 2px;
+  padding-left: 10px;
+  padding-right: 10px;
+  border: 0px;
+  border-radius: 3px;
 }
 #logout-link {
   margin-top: 10px;

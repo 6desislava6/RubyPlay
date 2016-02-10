@@ -63,6 +63,7 @@ class RubyPlay < Sinatra::Base
   end
 
   get '/logout' do
+    redirect_not_logged_in
     env['warden'].raw_session.inspect
     env['warden'].logout
     flash[:success] = 'Successfully logged out'
@@ -93,6 +94,7 @@ class RubyPlay < Sinatra::Base
   end
 
   get '/users/:id' do
+    redirect_not_logged_in
     @users = User.find_by_id(params[:id])
     @users.email
   end
@@ -139,36 +141,43 @@ class RubyPlay < Sinatra::Base
   end
 
   get '/all' do
+    redirect_not_logged_in
     GlobalState[:now_playing] = env['warden'].user.audio_files
     redirect '/now_playing'
   end
 
   post '/play_song' do
+    redirect_not_logged_in
     Player.play_song(params)
     redirect '/now_playing'
   end
 
   get '/pause_song' do
+    redirect_not_logged_in
     Player.pause_song
     redirect '/now_playing'
   end
 
   get '/sound_down' do
+    redirect_not_logged_in
     Player.sound_down
     redirect '/now_playing'
   end
 
   get '/sound_up' do
+    redirect_not_logged_in
     Player.sound_up
     redirect '/now_playing'
   end
 
   get '/stop_song' do
+    redirect_not_logged_in
     Player.stop_song
     redirect '/now_playing'
   end
 
   get '/make_playlist' do
+    redirect_not_logged_in
     @user = env['warden'].user
     @audio_files = @user.audio_files
     erb :main_layout, layout: false do
@@ -178,6 +187,9 @@ class RubyPlay < Sinatra::Base
 
   post '/make_playlist' do
     name = JSON.parse(params.to_json)['name']
+    ids = JSON.parse(params.to_json)['picked_songs']
+    redirect '/make_playlist' if name.nil? or ids.nil?
+
     ids = JSON.parse(params.to_json)['picked_songs'].map(&:to_i)
     audio_files = AudioFile.all.select { |file| ids.include? file.id }
     Player.make_playlist(audio_files, name, env['warden'].user)
@@ -185,6 +197,7 @@ class RubyPlay < Sinatra::Base
   end
 
   get '/playlists' do
+    redirect_not_logged_in
     @user = env['warden'].user
     @playlists = @user.playlists
     erb :main_layout, :layout => false do
@@ -209,10 +222,10 @@ class RubyPlay < Sinatra::Base
     erb :main_layout, layout: false do
       erb :searched
     end
-
   end
 
   get '/register_raspberry' do
+    redirect_not_logged_in
     @user = env['warden'].user
     erb :main_layout, layout: false do
       erb :register_raspberry
@@ -223,6 +236,12 @@ class RubyPlay < Sinatra::Base
     @user = env['warden'].user
     host, user, password = params[:host], params[:user], params[:password]
     SSHRegisterRaspberry.register_raspberry(host, user, password)
+  end
+
+  not_found do
+    status 404
+    @return_link = '/'
+    erb :not_found404
   end
 
   def make_params_upload(params)
