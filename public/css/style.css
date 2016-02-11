@@ -219,3 +219,21 @@ footer {
   color: white;
   border-radius: 10px;
 }
+#raspberry > form > div .form-control{
+  text-align: center;
+  width: 50%;
+  background-color: rgba(255, 255, 255, 0.5);
+  color: black;
+  padding: 10px;
+}
+#raspberry {
+  margin: 10px;
+}
+
+#raspberry div{
+  margin: 20px;
+}
+#raspberry input[type="submit"]{
+  padding: 6px;
+  width: 50%;
+}

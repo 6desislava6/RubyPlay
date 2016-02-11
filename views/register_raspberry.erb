@@ -1,13 +1,22 @@
 <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
-<form action="/register_raspberry" method="POST" enctype="/">
-  <label for="name">Host:</label>
-  <input type="text" name="host" />
-  <label for="user">User:</label>
-  <input type="text" name="user" />
-  <label for="password">Password:</label>
-  <input type="text" name="password" />
-  <input type="submit" value="Register">
+<div id="raspberry" class="form-group">
+  <form  action="/register_raspberry" method="POST" enctype="/">
+  <div>
+    <label for="name">Host:</label>
+    <input type="text" class="form-control" name="host" />
+  </div>
+  <div>
+    <label for="user">User:</label>
+    <input type="text" class="form-control" name="user" />
+  </div>
+  <div>
+    <label for="password">Password:</label>
+    <input type="password" class="form-control" name="password" />
+  </div>
+  <input type="submit" class="btn btn-default" value="Register">
 </form>
+
+</div>
 <div id="blank">
 
 </div>

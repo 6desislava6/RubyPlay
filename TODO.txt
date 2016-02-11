@@ -1,9 +1,21 @@
 Да праща имейл за потвърждение, когато се регистрира.
 за предишна и следваща песен
-register raspberry стил
 Тестове!
-Да пооправя
+** Да пооправя
 Триене на песни, триене на плейлисти
-Лошо име на плейлиста
-Да излиза грешка, ако raspberry-то не е активно
-Да се кешират/трият от raspberry-то
+Лошо име на плейлиста - просто не прави плейлиста в момента
+*** Да излиза грешка, ако raspberry-то не е активно
+Да може да се сменят данните на raspberry
+
+
+Timeout::Error
+https://net-ssh.github.io/net-ssh/classes/Net/SSH.html
+http://stackoverflow.com/questions/14729173/net-ssh-timeout-for-execution
+
+Тестване:
+http://www.getlaura.com/how-to-test-a-sinatra-app-with-rspec/
+http://shiroyasha.github.io/sinatra-app-with-rspec.html
+# These Heroku setup instructions can be at: https://devcenter.heroku.com/articles/rack
+
+
+!!! http://shiroyasha.github.io/sinatra-app-with-rspec.html

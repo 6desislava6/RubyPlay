@@ -1,10 +1,16 @@
 require 'sinatra/base'
 require 'sinatra/activerecord'
+require 'sinatra/base'
+require 'sinatra/activerecord'
+require 'paperclip'
+require 'warden'
+require 'sinatra/flash'
+require_relative './controllers/ssh_connection'
+require_relative './controllers/player'
+require_relative './helpers/SiteHelper'
 
-require './config/environments'
+require './config/environment'
 
-require_relative 'models/User'
-require_relative 'models/AudioFile'
-require_relative 'models/Playlist'
+Dir["#{__dir__}/models/*.rb"].each { |file| require_relative file }
 
 require_relative 'routes/user_routes'

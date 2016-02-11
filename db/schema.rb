@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151231081547) do
+ActiveRecord::Schema.define(version: 20160210143819) do
 
   create_table "audio_files", force: :cascade do |t|
     t.integer  "user_id"
@@ -37,6 +37,12 @@ ActiveRecord::Schema.define(version: 20151231081547) do
     t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "raspberries", force: :cascade do |t|
+    t.integer "user_id"
+    t.string  "host"
+    t.string  "name"
   end
 
   create_table "users", force: :cascade do |t|

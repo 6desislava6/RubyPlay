@@ -76,29 +76,14 @@ class SSHConnector
       ssh.exec 'if test -e "fifo";then  rm fifo; fi'
     end
   end
+
+  def delete_audiofiles
+    begin
+      Net::SSH.start(@host, @user, timeout: 3)do |ssh|
+        ssh.exec 'rm ./Desi/*'
+      end
+    rescue Net::SSH::ConnectionTimeout => e
+      return
+    end
+  end
 end
-
-'
-HOST = "10.42.0.136"
-USER = "pi"
-
-#KEYS = [File.read("key")[0..-2]]
-KEYS = []
-
-
-ssh = SSHConnector.new(HOST, USER, KEYS)
-ha = "winner.jpg"
-ssh.upload_song(ha, ha)
-
-#ha = "song.sh"
-#ssh.upload_song(ha, ha)
-th = Thread.new {ssh.play_song( "Dawin-Dessert.mp3")}
-sleep 10
-ssh.pause_song
-#puts "paused!"
-ssh.pause_song
-sleep 3
-ssh.stop_song'
-#th.join
-
-
