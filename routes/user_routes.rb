@@ -51,9 +51,14 @@ class RubyPlay < Sinatra::Base
     redirect_not_logged_in
     env['warden'].raw_session.inspect
     env['warden'].logout
-    GlobalState[:player].delete_audiofiles # if !GlobalState[:player].nil?
-    flash[:success] = 'Successfully logged out'
-    redirect '/'
+    begin
+      GlobalState[:player].delete_audiofiles # if !GlobalState[:player].nil?
+    rescue Errno::EINVAL => e
+    else
+      flash[:success] = 'Successfully logged out'
+    ensure
+      redirect '/'
+    end
   end
 
   post '/unauthenticated' do
@@ -69,7 +74,6 @@ class RubyPlay < Sinatra::Base
         ''
       end
     else
-
       redirect '/now_playing'
     end
   end

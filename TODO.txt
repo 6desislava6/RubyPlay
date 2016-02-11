@@ -19,3 +19,6 @@ http://shiroyasha.github.io/sinatra-app-with-rspec.html
 
 
 !!! http://shiroyasha.github.io/sinatra-app-with-rspec.html
+
+ПРОБЛЕМ
+http://stackoverflow.com/questions/8356750/converting-to-modular-sinatra-app-breaks-tests

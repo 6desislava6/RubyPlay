@@ -13,6 +13,7 @@ gem 'net-scp'
 gem 'bcrypt', :require => 'bcrypt' 
 gem 'warden'
 gem 'sinatra-flash'
+gem 'capybara'
 
 group :development, :test do
   gem 'sqlite3'
