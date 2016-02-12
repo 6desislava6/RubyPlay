@@ -5,11 +5,12 @@ require_relative './ssh_connection'
 
 class Player
 
+  attr_accessor :ssh_connection
+
   def initialize(host_raspberry, user_raspberry)
     @host = host_raspberry
     @user = user_raspberry
     @ssh_connection = SSHConnector.new(@host, @user, [])
-
   end
 
   def make_playlist(audio_files, name, user)
