@@ -1,21 +1,20 @@
 require 'net/scp'
 require 'net/ssh'
-
 # Registers the raspberry
 class SSHRegisterRaspberry
   TEMPLATE = "cat ~/.ssh/id_rsa.pub | sshpass -p %{password} ssh " \
-  "%{ user }@%{ host } 'cat >> .ssh/authorized_keys'"
+  "%{user}@%{host} 'cat >> .ssh/authorized_keys'"
   class << self
     def register_raspberry(host, user, password)
-      system(TEMPLATE % { user: user, host: host, password: password })
+      Timeout.timeout(6) do
+        system(TEMPLATE % { user: user, host: host, password: password })
+      end
     end
   end
   # after registering the raspberry no more passwords will be required
 end
-
 # Connects the raspberry to the server
 class SSHConnector
-
   def initialize(host, user, keys)
     @host = host
     @user = user
@@ -23,7 +22,6 @@ class SSHConnector
   end
 
   def upload_song(local_name, dest_name)
-    # .start(@host, @user,  :key_data => @keys, :keys_only => TRUE)
     Net::SCP.start(@host, @user) do |scp|
       channel = scp.upload local_name, "./Desi/#{dest_name}"
       channel.wait
@@ -81,7 +79,7 @@ class SSHConnector
     Net::SSH.start(@host, @user, timeout: 3)do |ssh|
       ssh.exec 'rm ./Desi/*'
     end
-  rescue Net::SSH::ConnectionTimeout => e
+  rescue Net::SSH::ConnectionTimeout
     return
   end
 end

@@ -1,25 +1,26 @@
+# The main sinatra app
 class RubyPlay < Sinatra::Base
   helpers SiteHelper
   register Sinatra::ActiveRecordExtension
-  set :views, Proc.new { File.join(root, "../views") }
-  set :public, Proc.new { File.join(root, "../public") }
+  set :views, proc { File.join(root, '../views') }
+  set :public, proc { File.join(root, '../public') }
 
   enable :sessions
   register Sinatra::Flash
 
-  GlobalState = {}
-  GlobalState[:now_playing] = nil
+  GLOBAL_STATE = {}
+  GLOBAL_STATE[:now_playing] = nil
 
   use Warden::Manager do |config|
-    config.serialize_into_session{|user| user.id }
-    config.serialize_from_session{|id| User.find(id) }
+    config.serialize_into_session { |user| user.id }
+    config.serialize_from_session { |id| User.find(id) }
     config.scope_defaults :default,
       strategies: [:password],
       action: 'unauthenticated'
     config.failure_app = self
   end
 
-  Warden::Manager.before_failure do |env,opts|
+  Warden::Manager.before_failure do |env, opts|
     env['REQUEST_METHOD'] = 'POST'
   end
 
@@ -39,7 +40,7 @@ class RubyPlay < Sinatra::Base
   post '/login' do
     authenticated = env['warden'].authenticate!
     flash[:success] = env['warden'].message
-    if session[:return_to].nil? or authenticated
+    if session[:return_to].nil? || authenticated
       redirect '/now_playing'
     else
       redirect session[:return_to]
@@ -51,8 +52,8 @@ class RubyPlay < Sinatra::Base
     env['warden'].raw_session.inspect
     env['warden'].logout
     begin
-      GlobalState[:player].delete_audiofiles
-    rescue Errno::EINVAL => e
+      GLOBAL_STATE[:player].delete_audiofiles
+    rescue Errno::EINVAL
     else
       flash[:success] = 'Successfully logged out'
     ensure
@@ -68,7 +69,7 @@ class RubyPlay < Sinatra::Base
 
   get '/' do
     if env['warden'].user.nil?
-      erb :home_layout, :layout => false do
+      erb :home_layout, layout: false do
         ''
       end
     else
@@ -77,7 +78,7 @@ class RubyPlay < Sinatra::Base
   end
 
   post '/' do
-    erb :home_layout, :layout => false do
+    erb :home_layout, layout: false do
       erb :unsuccessful_login
     end
   end
@@ -92,10 +93,10 @@ class RubyPlay < Sinatra::Base
     @user = User.new({ email: params[:email], password: params[:password] })
     begin
       @user.save!
-      erb :messages_layout, :layout => false do
+      erb :messages_layout, layout: false do
         erb :success_register
       end
-    rescue ActiveRecord::RecordInvalid => invalid
+    rescue ActiveRecord::RecordInvalid
       redirect '/invalid_user'
     end
   end
@@ -110,9 +111,9 @@ class RubyPlay < Sinatra::Base
     @audio_file.user = env['warden'].user
     success = @audio_file.save
     if success
-        redirect '/now_playing'
+      redirect '/now_playing'
     else
-        { :status => "NOK" }.to_json
+      { status: "Wrong file format" }.to_json
     end
   end
 
@@ -120,24 +121,28 @@ class RubyPlay < Sinatra::Base
     redirect_not_logged_in
     @user = env['warden'].user
 
-    @audio_files = GlobalState[:now_playing].nil? ? @user.audio_files : GlobalState[:now_playing]
+    @audio_files = if GLOBAL_STATE[:now_playing].nil?
+                     @user.audio_files
+                   else
+                     GLOBAL_STATE[:now_playing]
+                   end
     @size = @audio_files.reduce(0) { |size, song| size + song.file_file_size }
-    @size /= 2 ** 20
-    erb :main_layout, :layout => false do
+    @size /= 2**20
+    erb :main_layout, layout: false do
       erb :all_audio_files
     end
   end
 
   get '/all' do
     redirect_not_logged_in
-    GlobalState[:now_playing] = env['warden'].user.audio_files
+    GLOBAL_STATE[:now_playing] = env['warden'].user.audio_files
     redirect '/now_playing'
   end
 
   post '/play_song' do
     begin
       redirect_not_logged_in
-      GlobalState[:player].play_song(params)
+      GLOBAL_STATE[:player].play_song(params)
     rescue Errno::ECONNREFUSED
       erb :raspberry_not_configured
     else
@@ -147,25 +152,25 @@ class RubyPlay < Sinatra::Base
 
   get '/pause_song' do
     redirect_not_logged_in
-    GlobalState[:player].pause_song
+    GLOBAL_STATE[:player].pause_song
     redirect '/now_playing'
   end
 
   get '/sound_down' do
     redirect_not_logged_in
-    GlobalState[:player].sound_down
+    GLOBAL_STATE[:player].sound_down
     redirect '/now_playing'
   end
 
   get '/sound_up' do
     redirect_not_logged_in
-    GlobalState[:player].sound_up
+    GLOBAL_STATE[:player].sound_up
     redirect '/now_playing'
   end
 
   get '/stop_song' do
     redirect_not_logged_in
-    GlobalState[:player].stop_song
+    GLOBAL_STATE[:player].stop_song
     redirect '/now_playing'
   end
 
@@ -181,11 +186,11 @@ class RubyPlay < Sinatra::Base
   post '/make_playlist' do
     name = JSON.parse(params.to_json)['name']
     ids = JSON.parse(params.to_json)['picked_songs']
-    redirect '/make_playlist' if name.nil? or ids.nil?
+    redirect '/make_playlist' if name.nil? || ids.nil?
 
     ids = JSON.parse(params.to_json)['picked_songs'].map(&:to_i)
     audio_files = AudioFile.all.select { |file| ids.include? file.id }
-    GlobalState[:player].make_playlist(audio_files, name, env['warden'].user)
+    GLOBAL_STATE[:player].make_playlist(audio_files, name, env['warden'].user)
     redirect '/playlists'
   end
 
@@ -193,7 +198,7 @@ class RubyPlay < Sinatra::Base
     redirect_not_logged_in
     @user = env['warden'].user
     @playlists = @user.playlists
-    erb :main_layout, :layout => false do
+    erb :main_layout, layout: false do
       erb :playlists
     end
   end
@@ -202,7 +207,7 @@ class RubyPlay < Sinatra::Base
     @user = env['warden'].user
     playlist = Playlist.find(params['picked_playlist'])
     @audio_files = playlist.audio_files
-    GlobalState[:now_playing] = @audio_files
+    GLOBAL_STATE[:now_playing] = @audio_files
     redirect '/now_playing'
   end
 
@@ -210,12 +215,12 @@ class RubyPlay < Sinatra::Base
     searched = params[:search]
     @user = env['warden'].user
     @audio_files = @user.audio_files.select do |file|
-     (file.title.include? searched) or (searched.include? file.title)
+      (file.title.include? searched) || (searched.include? file.title)
     end
     erb :main_layout, layout: false do
       erb :searched
-      end
     end
+  end
 
   get '/register_raspberry' do
     redirect_not_logged_in
@@ -228,25 +233,28 @@ class RubyPlay < Sinatra::Base
   end
 
   post '/register_raspberry' do
-    @user = env['warden'].user
-
-    host, user, password = params[:host], params[:user], params[:password]
-    make_raspberry(@user, host, user)
-
-    SSHRegisterRaspberry.register_raspberry(host, user, password)
-    erb :messages_layout, layout: false do
-      erb :success_register_raspberry
+    begin
+      @user = env['warden'].user
+      host, user, password = params[:host], params[:user], params[:password]
+      SSHRegisterRaspberry.register_raspberry(host, user, password)
+    rescue Timeout::Error
+      erb :raspberry_not_configured
+    else
+      make_raspberry(@user, host, user)
+      erb :messages_layout, layout: false do
+        erb :success_register_raspberry
+      end
     end
   end
 
   before do
-    return if  env['warden'].user.nil?
-    if GlobalState[:player].nil?
+    return if env['warden'].user.nil?
+    if GLOBAL_STATE[:player].nil?
       raspberry = Raspberry.find_by(user_id: env['warden'].user.id)
       if !raspberry.nil?
-        GlobalState[:player] = Player.new(raspberry.host, raspberry.name)
+        GLOBAL_STATE[:player] = Player.new(raspberry.host, raspberry.name)
       else
-        GlobalState[:player] = Player.new('', '')
+        GLOBAL_STATE[:player] = Player.new('', '')
       end
     end
   end

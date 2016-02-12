@@ -129,7 +129,7 @@ describe 'RubyPlay', type: :feature do
         click_button 'Upload song'
       end
       expect(AudioFile.count).to eq(0)
-      expect(page).to have_content('{"status":"NOK"}')
+      expect(page).to have_content('{"status":"Wrong file format"}')
     end
   end
 

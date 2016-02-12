@@ -13,27 +13,18 @@ https://net-ssh.github.io/net-ssh/classes/Net/SSH.html
 http://stackoverflow.com/questions/14729173/net-ssh-timeout-for-execution
 
 Тестване:
-http://www.getlaura.com/how-to-test-a-sinatra-app-with-rspec/
-http://shiroyasha.github.io/sinatra-app-with-rspec.html
-# These Heroku setup instructions can be at: https://devcenter.heroku.com/articles/rack
-
-
-!!! http://shiroyasha.github.io/sinatra-app-with-rspec.html
-
-ПРОБЛЕМ
-http://stackoverflow.com/questions/8356750/converting-to-modular-sinatra-app-breaks-tests
-
-Capybara Factory girl Warden
-https://github.com/plataformatec/devise/wiki/How-To:-Test-with-Capybara
-
-
-Тестове:
-за моделите paperclip
-http://www.rubydoc.info/github/thoughtbot/paperclip/Paperclip/Shoulda/Matchers
-
-
-* helpers
 * вс контролери - ssh, player
 pi@10.42.0.136
 
+Тестове:
+SSH connector
+SSH register
+Others:
 Да махна ключовете от raspberry-то
+Да оправя стила
+Да подготвя песнички
+
+Разлика между mock и double stub
+Stub - fake implementation of a method
+Mock - fake implementation of an object
+Double - a newer term to represent an object that stands in for another object
