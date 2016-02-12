@@ -11,7 +11,7 @@ module SiteHelper
 
   def audio_files_make_playlsit(audio_files)
     audio_files.map do |file|
-      "<option value = #{file.id}> #{file.id} #{file.original_title} </option>"
+      "<option value = #{file.id} name = \"#{file.id}\"> #{file.id} #{file.original_title} </option>"
     end.join("\n")
   end
 

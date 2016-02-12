@@ -9,12 +9,14 @@ class AudioFile < ActiveRecord::Base
 
   #config.active_record.raise_in_transactional_callbacks = true
 
-    has_attached_file :file,
+  has_attached_file :file, :preserve_files => "false",
                     :url => "./system/:attachment/:id/:style/:basename.:extension",
                     :path => "./public/system/:attachment/:id/:style/:basename.:extension"
 
   validates_attachment_content_type :file, :content_type => [ 'audio/mpeg', 'audio/x-mpeg', 'audio/mp3', 'audio/x-mp3', 'audio/mpeg3', 'audio/x-mpeg3', 'audio/mpg', 'audio/x-mpg', 'audio/x-mpegaudio' ]
 
-  attr_accessor :delete_file
-  before_validation { file.clear if delete_file == '1' }
+  before_destroy do |record|
+    FileUtils.rm_rf("system/file/#{id}/original/#{record.file.file_file_name}.")
+    p 'HERE'
+  end
 end

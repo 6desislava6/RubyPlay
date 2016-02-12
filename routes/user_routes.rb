@@ -242,8 +242,11 @@ class RubyPlay < Sinatra::Base
     return if  env['warden'].user.nil?
     if GlobalState[:player].nil?
       raspberry = Raspberry.find_by(user_id: env['warden'].user.id)
-      return if raspberry.nil?
-      GlobalState[:player] = Player.new(raspberry.host, raspberry.name)
+      if !raspberry.nil?
+        GlobalState[:player] = Player.new(raspberry.host, raspberry.name)
+      else
+        GlobalState[:player] = Player.new('', '')
+      end
     end
   end
 

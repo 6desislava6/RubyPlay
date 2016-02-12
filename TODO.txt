@@ -28,5 +28,10 @@ https://github.com/plataformatec/devise/wiki/How-To:-Test-with-Capybara
 
 
 Тестове:
-за app-a
-когато се ъплоудне да се промени размера в total @size
+за моделите paperclip
+http://www.rubydoc.info/github/thoughtbot/paperclip/Paperclip/Shoulda/Matchers
+
+
+* helpers
+* models
+* вс контролери - ssh, player
