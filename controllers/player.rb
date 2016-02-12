@@ -8,6 +8,8 @@ class Player
   def initialize(host_raspberry, user_raspberry)
     @host = host_raspberry
     @user = user_raspberry
+    @ssh_connection = SSHConnector.new(@host, @user, [])
+
   end
 
   def make_playlist(audio_files, name, user)
@@ -26,9 +28,8 @@ class Player
     id = params[:picked_song].split(" ").first.to_i
     audio_file = AudioFile.find(id)
     path = make_path(id, audio_file)
-    ssh = SSHConnector.new(@host, @user, [])
-    ssh.upload_song(path, audio_file.title)
-    Thread.new { ssh.play_song(audio_file.title) }
+    @ssh_connection.upload_song(path, audio_file.title)
+    Thread.new { @ssh_connection.play_song(audio_file.title) }
   end
 
   def make_path(id, audio_file)
@@ -36,23 +37,23 @@ class Player
   end
 
   def pause_song
-    SSHConnector.new(@host, @user, []).pause_song
+    @ssh_connection.pause_song
   end
 
   def stop_song
-    SSHConnector.new(@host, @user, []).stop_song
+    @ssh_connection.stop_song
   end
 
   def sound_down
-    SSHConnector.new(@host, @user, []).sound_down
+    @ssh_connection.sound_down
   end
 
   def sound_up
-    SSHConnector.new(@host, @user, []).sound_up
+    @ssh_connection.sound_up
   end
 
   def delete_audiofiles
-    SSHConnector.new(@host, @user, []).delete_audiofiles
+    @ssh_connection.delete_audiofiles
   end
 end
 
