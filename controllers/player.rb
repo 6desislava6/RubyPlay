@@ -26,9 +26,6 @@ class Player
     id = params[:picked_song].split(" ").first.to_i
     audio_file = AudioFile.find(id)
     path = make_path(id, audio_file)
-    p 'EHO be'
-    p @host
-    p @user
     ssh = SSHConnector.new(@host, @user, [])
     ssh.upload_song(path, audio_file.title)
     Thread.new { ssh.play_song(audio_file.title) }
@@ -57,8 +54,5 @@ class Player
   def delete_audiofiles
     SSHConnector.new(@host, @user, []).delete_audiofiles
   end
-
-
 end
-# Да не създава всеки път нов
 

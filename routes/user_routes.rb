@@ -1,7 +1,6 @@
 class RubyPlay < Sinatra::Base
   helpers SiteHelper
   register Sinatra::ActiveRecordExtension
-  #set :database, { adapter: 'sqlite3', database: 'ruby_play.sqlite3' }
   set :views, Proc.new { File.join(root, "../views") }
   set :public, Proc.new { File.join(root, "../public") }
 
@@ -63,7 +62,6 @@ class RubyPlay < Sinatra::Base
 
   post '/unauthenticated' do
     session[:return_to] = env['warden.options'][:attempted_path]
-    puts env['warden.options'][:attempted_path]
     flash[:error] = env['warden'].message || "You must log in"
     redirect '/', 307
   end
@@ -106,7 +104,6 @@ class RubyPlay < Sinatra::Base
     erb :invalid_user
   end
 
-  # uploads a song
   post '/file' do
     @audio_file = AudioFile.new
     @audio_file.title, @audio_file.original_title, @audio_file.file = make_params_upload(params)

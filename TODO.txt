@@ -33,5 +33,5 @@ http://www.rubydoc.info/github/thoughtbot/paperclip/Paperclip/Shoulda/Matchers
 
 
 * helpers
-* models
 * вс контролери - ssh, player
+pi@10.42.0.136

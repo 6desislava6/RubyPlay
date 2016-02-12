@@ -12,7 +12,7 @@ def current_path
   URI.parse(current_url).path
 end
 
-RSpec.describe 'RubyPlay', type: :feature do
+describe 'RubyPlay', type: :feature do
   describe 'home page' do
     before do
       visit '/'
