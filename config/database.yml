@@ -1,6 +1,6 @@
 development:
   adapter: sqlite3
-  database: db/development.sqlite3
+  database: db/ruby_play.sqlite3
 
 test:
   adapter: sqlite3

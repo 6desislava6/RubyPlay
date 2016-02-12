@@ -1,7 +1,7 @@
 class RubyPlay < Sinatra::Base
   helpers SiteHelper
   register Sinatra::ActiveRecordExtension
-  set :database, { adapter: 'sqlite3', database: 'ruby_play.sqlite3' }
+  #set :database, { adapter: 'sqlite3', database: 'ruby_play.sqlite3' }
   set :views, Proc.new { File.join(root, "../views") }
   set :public, Proc.new { File.join(root, "../public") }
 
