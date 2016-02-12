@@ -51,7 +51,7 @@ class RubyPlay < Sinatra::Base
     env['warden'].raw_session.inspect
     env['warden'].logout
     begin
-      GlobalState[:player].delete_audiofiles # if !GlobalState[:player].nil?
+      GlobalState[:player].delete_audiofiles
     rescue Errno::EINVAL => e
     else
       flash[:success] = 'Successfully logged out'
@@ -135,10 +135,14 @@ class RubyPlay < Sinatra::Base
   end
 
   post '/play_song' do
-    redirect_not_logged_in
-
-    GlobalState[:player].play_song(params)
-    redirect '/now_playing'
+    begin
+      redirect_not_logged_in
+      GlobalState[:player].play_song(params)
+    rescue Errno::ECONNREFUSED
+      erb :raspberry_not_configured
+    else
+      redirect '/now_playing'
+    end
   end
 
   get '/pause_song' do

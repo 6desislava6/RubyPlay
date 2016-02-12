@@ -3,11 +3,11 @@ require 'net/ssh'
 
 # Registers the raspberry
 class SSHRegisterRaspberry
-  TEMPLATE = "cat ~/.ssh/id_rsa.pub | sshpass -p %{password} ssh %{user}@%{host} 'cat >> .ssh/authorized_keys'"
+  TEMPLATE = "cat ~/.ssh/id_rsa.pub | sshpass -p %{password} ssh " \
+  "%{ user }@%{ host } 'cat >> .ssh/authorized_keys'"
   class << self
     def register_raspberry(host, user, password)
-      p TEMPLATE % { user: user, host: host, password: password }
-      command = system(TEMPLATE % { user: user, host: host, password: password })
+      system(TEMPLATE % { user: user, host: host, password: password })
     end
   end
   # after registering the raspberry no more passwords will be required
@@ -78,12 +78,10 @@ class SSHConnector
   end
 
   def delete_audiofiles
-    begin
-      Net::SSH.start(@host, @user, timeout: 3)do |ssh|
-        ssh.exec 'rm ./Desi/*'
-      end
-    rescue Net::SSH::ConnectionTimeout => e
-      return
+    Net::SSH.start(@host, @user, timeout: 3)do |ssh|
+      ssh.exec 'rm ./Desi/*'
     end
+  rescue Net::SSH::ConnectionTimeout => e
+    return
   end
 end

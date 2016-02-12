@@ -3,8 +3,8 @@ require './models/Playlistable'
 require './models/AudioFile'
 require_relative './ssh_connection'
 
+# Middleware between the ssh connector and sintra app
 class Player
-
   attr_accessor :ssh_connection
 
   def initialize(host_raspberry, user_raspberry)
@@ -26,7 +26,7 @@ class Player
 
   def play_song(params)
     stop_song
-    id = params[:picked_song].split(" ").first.to_i
+    id = params[:picked_song].split(' ').first.to_i
     audio_file = AudioFile.find(id)
     path = make_path(id, audio_file)
     @ssh_connection.upload_song(path, audio_file.title)

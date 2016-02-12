@@ -35,3 +35,5 @@ http://www.rubydoc.info/github/thoughtbot/paperclip/Paperclip/Shoulda/Matchers
 * helpers
 * вс контролери - ssh, player
 pi@10.42.0.136
+
+Да махна ключовете от raspberry-то
