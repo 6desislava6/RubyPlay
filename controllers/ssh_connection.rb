@@ -1,5 +1,6 @@
 require 'net/scp'
 require 'net/ssh'
+
 # Registers the raspberry
 class SSHRegisterRaspberry
   TEMPLATE = "cat ~/.ssh/id_rsa.pub | sshpass -p %{password} ssh " \
@@ -13,8 +14,10 @@ class SSHRegisterRaspberry
   end
   # after registering the raspberry no more passwords will be required
 end
+
 # Connects the raspberry to the server
 class SSHConnector
+
   def initialize(host, user, keys)
     @host = host
     @user = user
