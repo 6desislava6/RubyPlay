@@ -20,7 +20,6 @@ pi@10.42.0.136
 SSH connector
 SSH register
 Others:
-Да махна ключовете от raspberry-то
 Да оправя стила
 Да подготвя песнички
 

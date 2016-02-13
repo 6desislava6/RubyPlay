@@ -111,7 +111,7 @@ class RubyPlay < Sinatra::Base
     @audio_file.user = env['warden'].user
     success = @audio_file.save
     if success
-      redirect '/now_playing'
+      redirect '/all'
     else
       { status: "Wrong file format" }.to_json
     end
